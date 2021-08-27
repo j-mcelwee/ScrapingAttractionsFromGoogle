@@ -57,6 +57,8 @@ with open('C:/Users/james/Desktop/Cities_List.csv', 'r') as f:
     for i in Cities:
         findatt(i)
 
-# You can change the naming of the file where the results will go.
+# You can change the naming of the csv file to save the results to.
 df = pd.DataFrame(attractions_list, columns=['Attractions'])
 df.to_csv(r'\Users\james\Desktop\google_attractions.csv', index=False, mode='a')
+
+
