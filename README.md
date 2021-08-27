@@ -4,23 +4,23 @@
 
 This objective of this python project is to scrape attractions from Google with Selenium. It uses Googles https://www.google.com/travel/things-to-do? to pull results from a list of cities that you must find or create. 
 
-#You will need:
+# You will need:
 
-#Python
+# Python
 I really like PyCharm at the moment but I also have regular python and use IDLE a lot too. 
 
-#Selenium
+# Selenium
 pip install Selenium
 
 With Pycharm click Python packages in the bottom left corner. Type in selenium, and you can install it from there.
 
-#Pandas
+# Pandas
 pip install Pandas
 
 
 With Pycharm click Python packages in the bottom left corner. Type in pandas, and you can install it from there.
 
-#Chrome Webdriver
+# Chrome Webdriver
 You should download this from https://chromedriver.chromium.org/downloads
 
 Make sure it matches the version of chrome you are running. You can find this by pasting into your chrome search bar chrome://settings/help
