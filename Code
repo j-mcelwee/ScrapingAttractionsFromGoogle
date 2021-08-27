@@ -1,0 +1,62 @@
+import random
+import selenium
+import pandas as pd
+from selenium import webdriver as wb
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium import common
+import time
+
+path = "https://www.google.com/travel/things-to-do?"
+
+# WebDriver
+WD = wb.Chrome('chromedriver.exe')
+attractions_list = []
+# div class ID of the attraction name, it's half of it before a space.
+tag_name = "skFvHc"
+
+# Function for entering the information and getting results.
+def findatt(x):
+    # Loads the page.
+    WD.get(path)
+    # Wait for the load
+    WD.implicitly_wait(10)
+    # Maximize the window to see it is working.
+    WD.maximize_window()
+    # Give a little time to sleep.
+    time.sleep(random.uniform(2, 4))
+    # Send to the input field the city.
+    input_field = WD.find_element_by_id("oA4zhb")
+    input_field.send_keys(x)
+    input_field.send_keys(Keys.ENTER)
+    # Wait for the page to load.
+    WD.implicitly_wait(4)
+    # While loop to catch errors. Not every city has attractions.
+    while True:
+        try:
+            time.sleep(random.uniform(4, 6))
+            see_all = WD.find_element_by_xpath("//body/c-wiz[2]/div[1]/div[2]/div[1]/c-wiz[1]/div[1]/div[1]/div[1]/div[2]/c-wiz[1]/div[1]/div[2]/div[3]/div[1]/div[1]/button[1]/div[2]")
+            WD.execute_script("arguments[0].click();", see_all)
+            WD.implicitly_wait(4)
+        except selenium.common.exceptions.NoSuchElementException:
+            break
+    time.sleep(random.uniform(2, 4))
+    # Find the names of attractions for later use.
+    attlist = WD.find_elements_by_class_name(tag_name)
+    # Add the attractions to a list sequentially.
+    for value in attlist:
+        attractions_list.append(value.text)
+    print(f"Scraped {len(attlist)} attractions from {x}")
+    # Time for breathing and avoid Google IP ban.
+    time.sleep(random.uniform(5, 15))
+
+# This is your cities list you created and want to find Google recommended attractions for.
+with open('C:/Users/james/Desktop/Cities_List.csv', 'r') as f:
+    lines = f.read().splitlines()
+    Cities = list(lines)
+    for i in Cities:
+        findatt(i)
+
+# You can change the naming of the file where the results will go.
+df = pd.DataFrame(attractions_list, columns=['Attractions'])
+df.to_csv(r'\Users\james\Desktop\google_attractions.csv', index=False, mode='a')
