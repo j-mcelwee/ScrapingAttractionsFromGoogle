@@ -3,7 +3,6 @@ import selenium
 import pandas as pd
 from selenium import webdriver as wb
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium import common
 import time
 
@@ -11,12 +10,13 @@ path = "https://www.google.com/travel/things-to-do?"
 
 # WebDriver
 WD = wb.Chrome('chromedriver.exe')
-attractions_list = []
+
 # div class ID of the attraction name, it's half of it before a space.
 tag_name = "skFvHc"
 
 # Function for entering the information and getting results.
 def findatt(x):
+    attractions_list = []
     # Loads the page.
     WD.get(path)
     # Wait for the load
