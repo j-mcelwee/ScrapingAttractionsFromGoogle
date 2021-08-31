@@ -9,32 +9,36 @@ import time
 path = "https://www.google.com/travel/things-to-do?"
 
 # WebDriver
-WD = wb.Chrome('chromedriver.exe')
+WD = wb.Chrome(executable_path='/home/james/GoogleAttractions/chromedriver')
 attractions_list = []
-# div class ID of the attraction name, it's half of it before a space.
+# div class ID of the attraction name
 tag_name = "skFvHc"
+city_from = []
 
-# Function for entering the information and getting results.
+
 def findatt(x):
+    # Global statement so we can see the city we got results from.
+    global city
     # Loads the page.
     WD.get(path)
     # Wait for the load
     WD.implicitly_wait(10)
     # Maximize the window to see it is working.
-    WD.maximize_window()
+    # WD.maximize_window()
     # Give a little time to sleep.
     time.sleep(random.uniform(2, 4))
-    # Send to the input field the city.
+    # Send to the input field the cities.
     input_field = WD.find_element_by_id("oA4zhb")
     input_field.send_keys(x)
     input_field.send_keys(Keys.ENTER)
     # Wait for the page to load.
     WD.implicitly_wait(4)
-    # While loop to catch errors. Not every city has attractions.
     while True:
         try:
             time.sleep(random.uniform(4, 6))
-            see_all = WD.find_element_by_xpath("//body/c-wiz[2]/div[1]/div[2]/div[1]/c-wiz[1]/div[1]/div[1]/div[1]/div[2]/c-wiz[1]/div[1]/div[2]/div[3]/div[1]/div[1]/button[1]/div[2]")
+            see_all = WD.find_element_by_xpath("//body/c-wiz[2]/div[1]/div[2]/div[1]/c-wiz[1]/div[1]/div[1]/div["
+                                               "1]/div[2]/c-wiz[1]/div[1]/div[2]/div[3]/div[1]/div[1]/button[1]/div["
+                                               "2]")
             WD.execute_script("arguments[0].click();", see_all)
             WD.implicitly_wait(4)
         except selenium.common.exceptions.NoSuchElementException:
@@ -45,19 +49,29 @@ def findatt(x):
     # Add the attractions to a list sequentially.
     for value in attlist:
         attractions_list.append(value.text)
+    cf = [city for x in range(len(attlist))]
     print(f"Scraped {len(attlist)} attractions from {x}")
     # Time for breathing and avoid Google IP ban.
     time.sleep(random.uniform(5, 15))
+    df1 = pd.DataFrame(attractions_list, columns=['Attractions'])
+    df2 = pd.DataFrame(cf, columns=['City'])
+    df = df1.join(df2)
 
-# This is your cities list you created and want to find Google recommended attractions for.
-with open('C:/Users/james/Desktop/Cities_List.csv', 'r') as f:
+    # noinspection PyTypeChecker
+
+    df.to_csv(f'~/Desktop/Google_Attractions{y}.csv', index=False, mode='a')
+
+
+y = 1
+with open(f'/home/james/Desktop/Cities_List {y}.csv', 'r') as f:
     lines = f.read().splitlines()
     Cities = list(lines)
-    for i in Cities:
-        findatt(i)
+    for city in Cities:
+        findatt(city)
 
-# You can change the naming of the csv file to save the results to.
-df = pd.DataFrame(attractions_list, columns=['Attractions'])
-df.to_csv(r'\Users\james\Desktop\google_attractions.csv', index=False, mode='a')
+# If using a small list, it is faster to do this at the end instead of adding to the results each iteration.
+# df = pd.DataFrame(attractions_list, columns=['Attractions'])
+# df.to_csv(r'\home\james\Desktop\google_attractions.csv', index=False, mode='a')
+
 
 
