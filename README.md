@@ -7,7 +7,7 @@ This objective of this python project is to scrape attractions from Google with 
 # You will need:
 
 # Python
-I really like PyCharm at the moment but I also have regular python and use IDLE a lot too. 
+I really like PyCharm at the moment but I use IDLE a lot too. 
 
 # Selenium
 pip install Selenium
