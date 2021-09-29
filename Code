@@ -1,3 +1,4 @@
+import fileinput
 import random
 import selenium
 import pandas as pd
@@ -9,16 +10,15 @@ import time
 path = "https://www.google.com/travel/things-to-do?"
 
 # WebDriver
-WD = wb.Chrome(executable_path='/home/james/GoogleAttractions/chromedriver')
+WD = wb.Chrome(executable_path='chromedriver.exe')
 attractions_list = []
 # div class ID of the attraction name
 tag_name = "skFvHc"
 city_from = []
+cities = []
 
 
 def findatt(x):
-    # Global statement so we can see the city we got results from.
-    global city
     # Loads the page.
     WD.get(path)
     # Wait for the load
@@ -49,7 +49,7 @@ def findatt(x):
     # Add the attractions to a list sequentially.
     for value in attlist:
         attractions_list.append(value.text)
-    cf = [city for x in range(len(attlist))]
+    cf = [x for n in range(len(attlist))]
     print(f"Scraped {len(attlist)} attractions from {x}")
     # Time for breathing and avoid Google IP ban.
     time.sleep(random.uniform(5, 15))
@@ -59,19 +59,24 @@ def findatt(x):
 
     # noinspection PyTypeChecker
 
-    df.to_csv(f'~/Desktop/Google_Attractions{y}.csv', index=False, mode='a')
+    df.to_csv(f'X.csv', index=False, mode='a')
 
+#
+def main():
+    # Can change file name, but make sure it is in the path.
+    with fileinput.FileInput('cities.csv') as f:
+        for line in f:
+            cities.append(line.rstrip('\n'))
+        return cities
 
-y = 1
-with open(f'/home/james/Desktop/Cities_List {y}.csv', 'r') as f:
-    lines = f.read().splitlines()
-    Cities = list(lines)
-    for city in Cities:
-        findatt(city)
+# Allows program use in another file.
+if __name__ == "__main__":
+    main()
 
+# Loop through the list returned and scrape attractions.
+for x in cities:
+    
+    findatt(x)
 # If using a small list, it is faster to do this at the end instead of adding to the results each iteration.
 # df = pd.DataFrame(attractions_list, columns=['Attractions'])
 # df.to_csv(r'\home\james\Desktop\google_attractions.csv', index=False, mode='a')
-
-
-
