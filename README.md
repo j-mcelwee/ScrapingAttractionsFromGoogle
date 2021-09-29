@@ -28,7 +28,8 @@ Make sure it matches the version of chrome you are running. You can find this by
 This works too with other webdrivers. You may have to modify the code a bit. 
 
 # First create a list of cities and save it as a csv file.
-You may need to edit line 53 so that your naming convention agrees.
+You may need to edit line 67 so that your naming convention agrees. Make sure the file is in the path. 
+
 
 
 
